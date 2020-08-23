@@ -24,34 +24,36 @@ export default class HomeScreen extends Component{
           position: null,
           screenNo: 0,
           swipe: "",
-        }
-
-        this.weatherCases = {
-          What: {
-            colors:["#00ff99", "#00804d"],
-            title: "???",
-            subtitle: [
-                "무슨 날씨인지 모르겠네요..",
-                "밍이네오.."
-            ],
-            icon: "ios-warning"
+          weatherCases: {
+            What: {
+              colors:["#00ff99", "#00804d"],
+              title: "???",
+              subtitle: [
+                  "무슨 날씨인지 모르겠네요..",
+                  "밍이네오.."
+              ],
+              icon: "ios-warning"
+            }
           }
-        };
-    
-        this._getWeather = this._getWeather.bind(this);
-        this._getCurrentLocAndWeather = this._getCurrentLocAndWeather.bind(this);
-        this._refreshWeather = this._refreshWeather.bind(this);
-      }
-    
-      componentDidMount() {
+        }
 
         firestore.collection('weatherCases').get()
         .then(docs => {
           docs.forEach(doc => {
-            this.weatherCases[doc.id] = doc.data();
+            this.state.weatherCases[doc.id] = doc.data();
           });
         });
-
+        
+      
+        this._getWeather = this._getWeather.bind(this);
+        this._getCurrentLocAndWeather = this._getCurrentLocAndWeather.bind(this);
+        this._refreshWeather = this._refreshWeather.bind(this);
+        
+        
+      }
+    
+      componentDidMount() {
+    
         navigator.geolocation.getCurrentPosition(
           position => {
             this._getWeather(position);
@@ -87,7 +89,7 @@ export default class HomeScreen extends Component{
       _getCurrentLocAndWeather() {
         navigator.geolocation.getCurrentPosition(
           position => {
-            console.log("position: ",position);
+            // console.log("position: ",position);
             this._getWeather(position);
           },
           error => {
@@ -108,17 +110,14 @@ export default class HomeScreen extends Component{
  
 
     render(){
-        const {isLoaded, error, temperature, name, screenNo, swipe} = this.state;
-        const subtitleIndex = Math.floor(Math.random()*(this.weatherCases[name].subtitle.length));
+        const {isLoaded, temperature, name, weatherCases} = this.state;
         return (
             <LinearGradient
-                      colors = {this.weatherCases[name].colors}
+                      colors = {weatherCases[name].colors}
                       style = {styles.container}> 
                 <Weather temp = {Math.floor(temperature)} 
-                    weatherCases = {this.weatherCases}
-                    weatherName = {name} 
+                    weatherCase = {weatherCases[name]}
                     pressWeather={this._refreshWeather} 
-                    subtitleIndex={subtitleIndex} 
                     isLoaded={isLoaded}/>
                 <StatusBar barStyle="light-content"/>
             </LinearGradient>

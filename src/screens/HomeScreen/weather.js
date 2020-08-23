@@ -91,32 +91,33 @@ export default class Weather extends Component {
     }
 
     _returnIcon() {
-      const {weatherCases, weatherName} = this.props;
+      const {weatherCase, weatherName} = this.props;
       if(weatherName == "Haze" || weatherName == "Mist") {
         return <MaterialCommunityIcons 
                 color="white" 
                 size={144} 
-                name={weatherCases[weatherName].icon} 
+                name={weatherCase.icon} 
           onPress={this._pressWeather}/>;
       } else if (weatherName == "Drizzle") {
         return <Feather 
                 color="white" 
                 size={144} 
-                name={weatherCases[weatherName].icon}
+                name={weatherCase.icon}
                 onPress={this._pressWeather}/>;
       } else {
         return <Ionicons 
                 color="white" 
                 size={144} 
-                name={weatherCases[weatherName].icon}
+                name={weatherCase.icon}
                 onPress={this._pressWeather}/>;
       }
     
     }
 
     render() {
-      const {temp, weatherCases, weatherName, subtitleIndex, isLoaded} = this.props;
-    
+      const {temp, weatherCase, isLoaded} = this.props;
+      const subtitleIndex = Math.floor(Math.random()*(weatherCase.subtitle.length));
+      
           
         return (
             <View style = {styles.container}>        
@@ -124,11 +125,11 @@ export default class Weather extends Component {
                 <View style={styles.upper} >
                     {this._returnIcon()}
                     <Text style={styles.temp}>{temp}°C</Text>
-                    <Text style={styles.temp}>{weatherName}</Text>
+                    <Text style={styles.temp}>{weatherCase.title}</Text>
                 </View>
                 <View style={styles.lower}>
-                    <Animated.Text style={this._getTitleStyle()}>{weatherCases[weatherName].title}</Animated.Text>
-                    <Animated.Text style={this._getSubTitleStyle()}>{weatherCases[weatherName].subtitle[subtitleIndex]}</Animated.Text>
+                    <Animated.Text style={this._getTitleStyle()}>{weatherCase.title}</Animated.Text>
+                    <Animated.Text style={this._getSubTitleStyle()}>{weatherCase.subtitle[subtitleIndex]}</Animated.Text>
                 </View>
             </View>
         )

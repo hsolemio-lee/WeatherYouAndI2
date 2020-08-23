@@ -17,7 +17,7 @@ const HomeStack = createStackNavigator(
   // recommend custom header
   {
     defaultNavigationOptions: ({ navigation }) => ({
-      title: "Home",
+      title: "Weather",
     }),
   }
 );
@@ -36,7 +36,7 @@ const SettingStack = createStackNavigator(
 
 const TabNavigator = createBottomTabNavigator(
   {
-    Home: HomeStack,
+    Weather: HomeStack,
     Setting: SettingStack,
   },
   {
@@ -45,7 +45,7 @@ const TabNavigator = createBottomTabNavigator(
         const { routeName } = navigation.state;
         let icon = "▲";
 
-        if (routeName === "Home") {
+        if (routeName === "Weather") {
           icon = "🌈";
         } else if (routeName === "Setting") {
           icon = "🌙";

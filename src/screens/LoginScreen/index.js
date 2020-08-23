@@ -7,6 +7,7 @@ import {
     StyleSheet
 } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { firestore } from '../../firebase/firebase';
 
 export default class LoginScreen extends Component{
     
@@ -16,6 +17,9 @@ export default class LoginScreen extends Component{
 
     _doLogin(){
         // do something
+        const user = firestore.collection('users').doc('hsolemio');
+        user.get().then(doc => console.log(doc.data()));
+
         this.props.navigation.replace('TabNavigator')
     }
 
@@ -23,7 +27,7 @@ export default class LoginScreen extends Component{
         return (
             <View style={styles.container}>
                 <View style={styles.titleArea}>
-                    <Text style={styles.title}>Simple App</Text>
+                    <Text style={styles.title}>Weather{"\n"}You & I</Text>
                 </View>
                 <View style={styles.formArea}>
                     <TextInput 
