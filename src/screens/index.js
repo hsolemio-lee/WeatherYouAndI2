@@ -8,6 +8,7 @@ import LoginScreen from "./LoginScreen";
 import HomeScreen from "./HomeScreen";
 import SettingScreen from "./SettingScreen";
 import SomethingScreen from "./SomethingScreen";
+import YourWeather from "./YourWeatherScreen";
 
 const HomeStack = createStackNavigator(
   {
@@ -21,6 +22,18 @@ const HomeStack = createStackNavigator(
     }),
   }
 );
+
+const YourWeatherStack = createStackNavigator(
+  {
+    YourWeather,
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      title: "Your Weather"
+    }),
+  }
+);
+
 const SettingStack = createStackNavigator(
   {
     SettingScreen,
@@ -36,7 +49,18 @@ const SettingStack = createStackNavigator(
 
 const TabNavigator = createBottomTabNavigator(
   {
-    Weather: HomeStack,
+    Weather: {
+      screen: HomeStack,
+      navigationOptions: {
+        title: 'Weather'
+      }
+    },
+    YourWeather: {
+      screen: YourWeatherStack,
+      navigationOptions: {
+        title: 'Your Weather'
+      }
+    },
     Setting: SettingStack,
   },
   {
@@ -47,6 +71,8 @@ const TabNavigator = createBottomTabNavigator(
 
         if (routeName === "Weather") {
           icon = "🌈";
+        } else if (routeName === "YourWeather") {
+          icon = "💖";
         } else if (routeName === "Setting") {
           icon = "🌙";
         }
