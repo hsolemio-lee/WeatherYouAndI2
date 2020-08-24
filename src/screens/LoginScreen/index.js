@@ -26,9 +26,7 @@ export default class LoginScreen extends Component{
     };
 
     componentDidMount() {
-        if(AsyncStorage.getItem('user') !== null) {
-            this.props.navigation.replace('TabNavigator');
-        }
+        
     }
 
     _doLogin(){

@@ -28,16 +28,16 @@ export default class Weather extends Component {
       Animated.parallel([
           Animated.timing(this.state.titleValue, {
             toValue : 1,
-            duration : 1000,
+            duration : 300,
             //easing : Easing.bounce,
             delay : 200,
             useNativeDriver: true,
           }),
           Animated.timing (this.state.subTitleValue, {
             toValue : 1,
-            duration : 1000,
+            duration : 300,
             //easing : Easing.bounce,
-            delay : 1000,
+            delay : 300,
             useNativeDriver: true,
           })
       ]).start();
@@ -47,16 +47,16 @@ export default class Weather extends Component {
       Animated.parallel([
         Animated.timing(this.state.titleValue, {
           toValue : 0,
-          duration : 1000,
+          duration : 300,
           //easing : Easing.bounce,
           delay : 0,
           useNativeDriver: true,
         }),
         Animated.timing (this.state.subTitleValue, {
           toValue : 0,
-          duration : 1000,
+          duration : 300,
           //easing : Easing.bounce,
-          delay : 1000,
+          delay : 300,
           useNativeDriver: true,
         })
       ]).start(()=>{

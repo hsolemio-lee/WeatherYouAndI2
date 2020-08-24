@@ -18,6 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import {LinearGradient} from 'expo-linear-gradient';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { firestore } from '../../firebase/firebase'
+import { Header } from 'react-navigation-stack';
 
 export default class YourWeather extends Component{
     constructor(props) {
@@ -65,14 +66,14 @@ export default class YourWeather extends Component{
         Animated.parallel([
           Animated.timing(this.state.myWeatherOpacity, {
             toValue : 0,
-            duration : 1000,
+            duration : 300,
             //easing : Easing.bounce,
             delay : 0,
             useNativeDriver: true,
           }),
           Animated.timing(this.state.yourWeatherOpacity, {
-            toValue : 1,
-            duration : 1000,
+            toValue : 0,
+            duration : 300,
             //easing : Easing.bounce,
             delay : 0,
             useNativeDriver: true,
@@ -114,20 +115,25 @@ export default class YourWeather extends Component{
     }
     
     _saveMessage() {
-        AsyncStorage.getItem('user').then(userId => {
-            firestore.collection('yourWeather').doc(userId).set({
-                message: this.state.message
-            })
-            .then(() => {
-                console.log("message save success!!");
-                this.textInput.clear();
-                this._fadeOut();
-            })
-            .catch((err) => {
-                console.log('error!!!');
+        if(this.state.message.length > 0) {
+            AsyncStorage.getItem('user').then(userId => {
+                firestore.collection('yourWeather').doc(userId).set({
+                    message: this.state.message
+                })
+                .then(() => {
+                    console.log("message save success!!");
+                    this.textInput.clear();
+                    this._fadeOut();
+                })
+                .catch((err) => {
+                    console.log('error!!!');
+                });
+                
             });
-            
-        });
+        } else {
+            this._fadeOut();
+        }
+        
     }  
     
 
@@ -136,7 +142,7 @@ export default class YourWeather extends Component{
 
         return (
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <KeyboardAvoidingView style={{flex: 1}} behavior="padding" enabled>
+                    <KeyboardAvoidingView style={{flex: 1}} behavior={Platform.OS == 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Header.HEIGHT+40}>
                     <LinearGradient
                             colors = {['#FEF253', '#FF7300']}
                             style = {styles.container}> 
@@ -177,7 +183,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: wp('5%'),
-        backgroundColor: 'white',
     },
     wrapContent: {
         width: wp('90%'),
@@ -186,7 +191,7 @@ const styles = StyleSheet.create({
         
     },
     content: {
-        flex: 1,
+        flex: 6,
         width: "100%",
         height: "100%",
     },
@@ -210,7 +215,7 @@ const styles = StyleSheet.create({
     footer:{
         flexDirection: 'row',
         flex : 1,
-        height:60,
+        height:100,
         backgroundColor: 'transparent',
         paddingHorizontal:10,
         padding:5,
