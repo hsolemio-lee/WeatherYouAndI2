@@ -12,7 +12,8 @@ import {
     Keyboard,
     AsyncStorage,
     Animated,
-    TouchableHighlightBase
+    TouchableHighlightBase,
+    Platform
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import {LinearGradient} from 'expo-linear-gradient';
