@@ -4,7 +4,8 @@ import {
     Text,
     TouchableOpacity,
     Alert,
-    StyleSheet
+    StyleSheet,
+    AsyncStorage
 } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -33,6 +34,7 @@ export default class SettingScreen extends Component{
             actions: [NavigationActions.navigate({ routeName: 'LoginScreen' })],
         });
         this.props.navigation.dispatch(resetAction);
+        AsyncStorage.clear();
     }
 
     render(){
