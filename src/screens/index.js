@@ -9,6 +9,7 @@ import HomeScreen from "./HomeScreen";
 import SettingScreen from "./SettingScreen";
 import SomethingScreen from "./SomethingScreen";
 import YourWeather from "./YourWeatherScreen";
+import ChatScreen from "./ChatScreen";
 
 const HomeStack = createStackNavigator(
   {
@@ -33,6 +34,19 @@ const YourWeatherStack = createStackNavigator(
     }),
   }
 );
+
+const ChatStack = createStackNavigator(
+  {
+    ChatScreen
+  },
+  {
+    defaultNavigationOptions: ({navigation}) => ({
+      title: "Chat"
+    }),
+  }
+)
+
+
 
 const SettingStack = createStackNavigator(
   {
@@ -59,6 +73,12 @@ const TabNavigator = createBottomTabNavigator(
       screen: YourWeatherStack,
       navigationOptions: {
         title: 'Your Weather'
+      }
+    },
+    ChatScreen: {
+      screen: ChatStack,
+      navigationOptions: {
+        title: 'Chat'
       }
     },
     Setting: SettingStack,
