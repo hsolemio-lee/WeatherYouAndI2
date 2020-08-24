@@ -4,23 +4,54 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    StyleSheet
+    StyleSheet,
+    AsyncStorage
 } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { firestore } from '../../firebase/firebase';
+// import Toast from 'react-native-simple-toast';
 
 export default class LoginScreen extends Component{
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            idText: '',
+            pwText: ''
+        }
+    }
     
     static navigationOptions = {
         headerShown: false,
     };
 
+    componentDidMount() {
+        if(AsyncStorage.getItem('user') !== null) {
+            this.props.navigation.replace('TabNavigator');
+        }
+    }
+
     _doLogin(){
         // do something
-        const user = firestore.collection('users').doc('hsolemio');
-        user.get().then(doc => console.log(doc.data()));
-
-        this.props.navigation.replace('TabNavigator')
+        if(this.state.idText.length > 0) {
+            const user = firestore.collection('users').doc(this.state.idText);
+            user.get().then(doc => {
+                const userInfo = doc.data();
+                console.log(userInfo);
+                if(userInfo.password === this.state.pwText) {
+                    console.log('password match !!!');
+                    AsyncStorage.setItem('user', doc.id);
+                    this.props.navigation.replace('TabNavigator');
+                } else {
+                    console.log('Invalid ID and Password. Please check again.');
+                    // Toast.show('Invalid ID and Password. Please check again.');
+                }
+            });
+        } else {
+            console.log('ID is empty.');
+            // Toast.show('ID is empty.');
+        }
+        
     }
 
     render(){
@@ -30,10 +61,15 @@ export default class LoginScreen extends Component{
                     <Text style={styles.title}>Weather{"\n"}You & I</Text>
                 </View>
                 <View style={styles.formArea}>
-                    <TextInput 
+                    <TextInput
+                        onChangeText={(idText) => this.setState({idText})}
+                        value={this.state.idText}
                         style={styles.textForm} 
                         placeholder={"ID"}/>
-                    <TextInput 
+                    <TextInput
+                        onChangeText={(pwText) => this.setState({pwText})}
+                        value={this.state.pwText}
+                        secureTextEntry={true} 
                         style={styles.textForm} 
                         placeholder={"Password"}/>
                 </View>
