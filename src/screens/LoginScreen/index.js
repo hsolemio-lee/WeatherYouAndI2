@@ -25,10 +25,6 @@ export default class LoginScreen extends Component{
         headerShown: false,
     };
 
-    componentDidMount() {
-        
-    }
-
     _doLogin(){
         // do something
         if(this.state.idText.length > 0) {
