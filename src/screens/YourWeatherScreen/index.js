@@ -13,7 +13,8 @@ import {
     AsyncStorage,
     Animated,
     TouchableHighlightBase,
-    Platform
+    Platform,
+    SafeAreaView
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import {LinearGradient} from 'expo-linear-gradient';
@@ -140,42 +141,46 @@ export default class YourWeather extends Component{
 
     render(){
         const {yourWeatherMessage, myWeatherMessage} = this.state;
+        const weatherUI = <LinearGradient
+                                    colors = {['#FEF253', '#FF7300']}
+                                    style = {styles.container}> 
+                                <View style={styles.content}>
+                                    <Text style={styles.title}>Jimin's weather</Text>
+                                    <Animated.Text style={this._getYourWeatherMessageStyle()}>{yourWeatherMessage}</Animated.Text>
+                                </View>
+                                <View style={styles.content}>
+                                    <Text style={styles.title}>Hansol's weather</Text>
+                                    <Animated.Text style={this._getMyWeatherMessageStyle()}>{myWeatherMessage}</Animated.Text>
+                                </View>
+                                <View style={styles.footer} >
+                                    <TouchableOpacity style={styles.inputContainer}>
+                                    <TextInput 
+                                        ref={input => {this.textInput = input}}
+                                        style={styles.inputs}
+                                        placeholder="본인의 날씨(기분, 컨디션)를 표현해 보세요~"
+                                        underlineColorAndroid='transparent'
+                                        onChangeText={(text)=>{
+                                            this.setState({
+                                                message: text
+                                            });
+                                        }
+                                    }/>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.btnSend} onPress={this._saveMessage}>
+                                        <Ionicons name="ios-send" color="white"/>
+                                    </TouchableOpacity>
+                                </View>
+                            </LinearGradient>;
+        if(Platform.OS === 'android') {
+            return (
+                <KeyboardAvoidingView style={{flex: 1}} behavior="height" keyboardVerticalOffset={30} enable>
+                    {weatherUI}
+                </KeyboardAvoidingView>
+            )
+        }
 
         return (
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <KeyboardAvoidingView style={{flex: 1}} behavior={Platform.OS == 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Header.HEIGHT+40}>
-                    <LinearGradient
-                            colors = {['#FEF253', '#FF7300']}
-                            style = {styles.container}> 
-                        <View style={styles.content}>
-                            <Text style={styles.title}>Jimin's weather</Text>
-                            <Animated.Text style={this._getYourWeatherMessageStyle()}>{yourWeatherMessage}</Animated.Text>
-                        </View>
-                        <View style={styles.content}>
-                            <Text style={styles.title}>Hansol's weather</Text>
-                            <Animated.Text style={this._getMyWeatherMessageStyle()}>{myWeatherMessage}</Animated.Text>
-                        </View>
-                        <View style={styles.footer} >
-                            <TouchableOpacity style={styles.inputContainer}>
-                            <TextInput 
-                                ref={input => {this.textInput = input}}
-                                style={styles.inputs}
-                                placeholder="본인의 날씨(기분, 컨디션)를 표현해 보세요~"
-                                underlineColorAndroid='transparent'
-                                onChangeText={(text)=>{
-                                    this.setState({
-                                        message: text
-                                    });
-                                }
-                            }/>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.btnSend} onPress={this._saveMessage}>
-                                <Ionicons name="ios-send" color="white"/>
-                            </TouchableOpacity>
-                        </View>
-                    </LinearGradient>
-                </KeyboardAvoidingView>
-            </TouchableWithoutFeedback>
+            <SafeAreaView style={{flex:1}}>{weatherUI}</SafeAreaView>
         );
     }
 }
