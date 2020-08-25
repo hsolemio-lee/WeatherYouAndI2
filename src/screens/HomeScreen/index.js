@@ -1,13 +1,17 @@
 import React, {Component} from 'react';
 import {
     StyleSheet,
-    StatusBar
+    StatusBar,
+    AsyncStorage
 } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Weather from './weather';
 import {LinearGradient} from 'expo-linear-gradient';
 import { firestore } from '../../firebase/firebase';
 import {weatherCases} from './weatherCases';
+import * as Notifications from 'expo-notifications';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
 
 const API_KEY = '0c429a365bfdc6a7526ee98e9324781f';
 
@@ -30,15 +34,56 @@ export default class HomeScreen extends Component{
         
         
       }
+
+      registerForPushNotificationsAsync = async () => {
+        if (Constants.isDevice) {
+          const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+          let finalStatus = existingStatus;
+          if (existingStatus !== 'granted') {
+            const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+            finalStatus = status;
+          }
+          if (finalStatus !== 'granted') {
+            alert('Failed to get push token for push notification!');
+            return;
+          }
+          const token = await Notifications.getExpoPushTokenAsync();
+        
+          console.log(token);
+          firestore.collection('users').doc(this.user).set({value: token});
+
+          this.setState({ expoPushToken: token });
+        } else {
+          alert('Must use physical device for Push Notifications');
+        }
+      
+        if (Platform.OS === 'android') {
+          Notifications.createChannelAndroidAsync('default', {
+            name: 'default',
+            sound: true,
+            priority: 'max',
+            vibrate: [0, 250, 250, 250],
+          });
+        }
+        
+      };
     
-      componentDidMount() {
-        this.weatherCases = weatherCases;
-        firestore.collection('weatherCases').get()
-        .then(docs => {
-          docs.forEach(doc => {
-            this.weatherCases[doc.id] = doc.data();
-          })
-        });
+      async componentDidMount() {
+        const user = await AsyncStorage.getItem('user');
+        if(user != null) {
+          this.user = user;
+  
+          await this.registerForPushNotificationsAsync();
+  
+          this.weatherCases = weatherCases;
+          firestore.collection('weatherCases').get()
+          .then(docs => {
+            docs.forEach(doc => {
+              this.weatherCases[doc.id] = doc.data();
+            })
+          });
+        }
+        
 
         navigator.geolocation.getCurrentPosition(
           position => {
