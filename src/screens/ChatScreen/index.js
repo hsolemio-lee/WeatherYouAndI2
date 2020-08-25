@@ -16,8 +16,8 @@ export default class ChatScreen extends React.Component {
         const user = await AsyncStorage.getItem('user');
         if(user != null) {
             return {
-                _id: user,
-                name: user
+                _id: user.id,
+                name: user.id
             }
         } else {
             const resetAction = StackActions.reset({
@@ -37,7 +37,7 @@ export default class ChatScreen extends React.Component {
                 if(!this.toToken) {
                     firestore.collection('users').get()
                     .then(docs => {
-                        this.toToken = docs.filter(doc => doc.id !== val)[0]
+                        this.toToken = docs.filter(doc => doc.id !== val && doc.data().token.length > 0)[0]
                     });
                 }
             });
@@ -69,7 +69,6 @@ export default class ChatScreen extends React.Component {
     }
 
     render() {
-        console.log('this.user',this.user);
         const chat = <GiftedChat messages={this.state.messages} onSend={this.sendMessage} user={this.user} />;
 
         if (Platform.OS === 'android') {
