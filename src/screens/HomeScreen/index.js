@@ -50,7 +50,8 @@ export default class HomeScreen extends Component{
           const token = await Notifications.getExpoPushTokenAsync();
         
           console.log(token);
-          firestore.collection('users').doc(this.user).set({value: token});
+          this.user.token = token.data;
+          firestore.collection('users').doc(this.user.id).set(this.user);
 
           this.setState({ expoPushToken: token });
         } else {
