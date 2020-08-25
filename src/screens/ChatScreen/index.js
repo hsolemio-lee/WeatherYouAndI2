@@ -1,8 +1,9 @@
 import React from 'react';
 import {Platform, KeyboardAvoidingView, SafeAreaView, AsyncStorage, StyleSheet, RecyclerViewBackedScrollView} from 'react-native';
 import {GiftedChat} from 'react-native-gifted-chat';
-import Fire from '../../firebase/firebase';
+import Fire, {firestore} from '../../firebase/firebase';
 import { Header } from 'react-navigation-stack';
+
 
 
 export default class ChatScreen extends React.Component {
@@ -30,9 +31,17 @@ export default class ChatScreen extends React.Component {
     }
 
     componentDidMount() {
-        this.getUserData().then(val => {
-            this.user = val;
-        });
+        if(!this.user) {
+            this.getUserData().then(val => {
+                this.user = val;
+                if(!this.toToken) {
+                    firestore.collection('users').get()
+                    .then(docs => {
+                        this.toToken = docs.filter(doc => doc.id !== val)[0]
+                    });
+                }
+            });
+        }
         Fire.get(message => this.setState(previous => ({
             messages: GiftedChat.append(previous.messages, message)
         })));
@@ -42,9 +51,26 @@ export default class ChatScreen extends React.Component {
         Fire.off();
     }
 
+    sendMessage(messages) {
+        Fire.send(messages);
+        let response = fetch('https://exp.host/--/api/v2/push/send', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                to: `ExponentPushToken[${this.toToken}]`,
+                sound: 'default',
+                title: 'WeatherYou&I',
+                body: messages
+            })
+        });
+    }
+
     render() {
         console.log('this.user',this.user);
-        const chat = <GiftedChat messages={this.state.messages} onSend={Fire.send} user={this.user} />;
+        const chat = <GiftedChat messages={this.state.messages} onSend={this.sendMessage} user={this.user} />;
 
         if (Platform.OS === 'android') {
             return (
