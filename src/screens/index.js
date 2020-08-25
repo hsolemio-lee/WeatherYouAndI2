@@ -93,7 +93,7 @@ const TabNavigator = createBottomTabNavigator(
           icon = "🌈";
         } else if (routeName === "YourWeather") {
           icon = "💖";
-        } else if (routeName === "Chat") {
+        } else if (routeName === "ChatScreen") {
           icon = "💬";
         } else if (routeName === "Setting") {
           icon = "🌙";
