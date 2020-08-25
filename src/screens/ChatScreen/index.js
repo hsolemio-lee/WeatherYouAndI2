@@ -47,7 +47,7 @@ export default class ChatScreen extends React.Component {
 
         if (Platform.OS === 'android') {
             return (
-                <KeyboardAvoidingView style={{flex: 1}} behavior="padding" keyboardVerticalOffset={30} enable>
+                <KeyboardAvoidingView style={{flex: 1}} behavior="height" keyboardVerticalOffset={30} enable>
                     {chat}
                 </KeyboardAvoidingView>
             )
