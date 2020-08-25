@@ -2,6 +2,7 @@ import React from 'react';
 import {Platform, KeyboardAvoidingView, SafeAreaView, AsyncStorage, StyleSheet, RecyclerViewBackedScrollView} from 'react-native';
 import {GiftedChat} from 'react-native-gifted-chat';
 import Fire from '../../firebase/firebase';
+import { Header } from 'react-navigation-stack';
 
 
 export default class ChatScreen extends React.Component {
@@ -47,7 +48,7 @@ export default class ChatScreen extends React.Component {
 
         if (Platform.OS === 'android') {
             return (
-                <KeyboardAvoidingView style={{flex: 1}} behavior="height" keyboardVerticalOffset={30} enable>
+                <KeyboardAvoidingView style={{flex: 1}} behavior="height" keyboardVerticalOffset={Header.HEIGHT+30} enable>
                     {chat}
                 </KeyboardAvoidingView>
             )
