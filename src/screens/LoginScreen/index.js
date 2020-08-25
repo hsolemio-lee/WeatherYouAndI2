@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { firestore } from '../../firebase/firebase';
+// import Snackbar from 'react-native-snackbar';
 // import Toast from 'react-native-simple-toast';
 
 export default class LoginScreen extends Component{
@@ -31,19 +32,26 @@ export default class LoginScreen extends Component{
             const user = firestore.collection('users').doc(this.state.idText);
             user.get().then(doc => {
                 const userInfo = doc.data();
-                console.log(userInfo);
                 if(userInfo.password === this.state.pwText) {
                     console.log('password match !!!');
-                    AsyncStorage.setItem('user', doc.id);
+                    AsyncStorage.setItem('user', {id: doc.id, password: doc.data().password});
                     this.props.navigation.replace('TabNavigator');
                 } else {
                     console.log('Invalid ID and Password. Please check again.');
                     // Toast.show('Invalid ID and Password. Please check again.');
+                    // Snackbar.show({
+                    //     text: 'Invalid ID and Password. Please check again.',
+                    //     duration: Snackbar.LENGTH_SHORT
+                    // });
                 }
             });
         } else {
             console.log('ID is empty.');
             // Toast.show('ID is empty.');
+            // Snackbar.show({
+            //     text: 'ID is empty.',
+            //     duration: Snackbar.LENGTH_SHORT
+            // });
         }
         
     }
