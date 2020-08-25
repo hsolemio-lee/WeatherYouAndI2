@@ -8,6 +8,8 @@ import LoginScreen from "./LoginScreen";
 import HomeScreen from "./HomeScreen";
 import SettingScreen from "./SettingScreen";
 import SomethingScreen from "./SomethingScreen";
+import YourWeather from "./YourWeatherScreen";
+import ChatScreen from "./ChatScreen";
 
 const HomeStack = createStackNavigator(
   {
@@ -17,10 +19,35 @@ const HomeStack = createStackNavigator(
   // recommend custom header
   {
     defaultNavigationOptions: ({ navigation }) => ({
-      title: "Home",
+      title: "Weather",
     }),
   }
 );
+
+const YourWeatherStack = createStackNavigator(
+  {
+    YourWeather,
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      title: "Your Weather"
+    }),
+  }
+);
+
+const ChatStack = createStackNavigator(
+  {
+    ChatScreen
+  },
+  {
+    defaultNavigationOptions: ({navigation}) => ({
+      title: "Chat"
+    }),
+  }
+)
+
+
+
 const SettingStack = createStackNavigator(
   {
     SettingScreen,
@@ -36,7 +63,24 @@ const SettingStack = createStackNavigator(
 
 const TabNavigator = createBottomTabNavigator(
   {
-    Home: HomeStack,
+    Weather: {
+      screen: HomeStack,
+      navigationOptions: {
+        title: 'Weather'
+      }
+    },
+    YourWeather: {
+      screen: YourWeatherStack,
+      navigationOptions: {
+        title: 'Your Weather'
+      }
+    },
+    ChatScreen: {
+      screen: ChatStack,
+      navigationOptions: {
+        title: 'Chat'
+      }
+    },
     Setting: SettingStack,
   },
   {
@@ -45,8 +89,12 @@ const TabNavigator = createBottomTabNavigator(
         const { routeName } = navigation.state;
         let icon = "▲";
 
-        if (routeName === "Home") {
+        if (routeName === "Weather") {
           icon = "🌈";
+        } else if (routeName === "YourWeather") {
+          icon = "💖";
+        } else if (routeName === "ChatScreen") {
+          icon = "💬";
         } else if (routeName === "Setting") {
           icon = "🌙";
         }
