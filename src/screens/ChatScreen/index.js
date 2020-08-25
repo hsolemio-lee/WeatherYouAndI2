@@ -33,7 +33,7 @@ export default class ChatScreen extends React.Component {
             this.user = val;
         });
         Fire.get(message => this.setState(previous => ({
-            messages: GiftedChat.append(previous.message, message)
+            messages: GiftedChat.append(previous.messages, message)
         })));
     }
 
