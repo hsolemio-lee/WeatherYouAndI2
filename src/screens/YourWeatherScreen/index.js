@@ -173,7 +173,7 @@ export default class YourWeather extends Component{
                             </LinearGradient>;
         if(Platform.OS === 'android') {
             return (
-                <KeyboardAvoidingView style={{flex: 1}} behavior="height" keyboardVerticalOffset={30} enable>
+                <KeyboardAvoidingView style={{flex: 1}} behavior="height" keyboardVerticalOffset={Header.HEIGHT+30} enable>
                     {weatherUI}
                 </KeyboardAvoidingView>
             )
