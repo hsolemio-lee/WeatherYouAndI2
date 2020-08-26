@@ -27,6 +27,14 @@ export default class LoginScreen extends Component{
         headerShown: false,
     };
 
+    async componentDidMount() {
+        const userId = await AsyncStorage.getItem('userId');
+        
+        if(userId && userId !== null) {
+            this.props.navigation.replace('TabNavigator');
+        }
+    }
+
     _doLogin(){
         // do something
         if(this.state.idText.length > 0) {
