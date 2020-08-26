@@ -27,11 +27,11 @@ class Fire {
   parse = message => {
     const {user, text, timestamp} = message.val();
     const {key: _id} = message;
-    const createAt = new Date(timestamp);
+    const createdAt = new Date(timestamp);
 
     return {
       _id,
-      createAt,
+      createdAt,
       text,
       user
     }
