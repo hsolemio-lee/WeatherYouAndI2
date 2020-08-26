@@ -5,7 +5,8 @@ import {
     TextInput,
     TouchableOpacity,
     StyleSheet,
-    AsyncStorage
+    AsyncStorage,
+    Alert
 } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { firestore } from '../../firebase/firebase';
@@ -50,11 +51,13 @@ export default class LoginScreen extends Component{
             });
         } else {
             console.log('ID is empty.');
-            // Toast.show('ID is empty.');
-            // Snackbar.show({
-            //     text: 'ID is empty.',
-            //     duration: Snackbar.LENGTH_SHORT
-            // });
+            Alert.alert(
+                        "Alert",
+                        "ID doesn't exist. Please check ID",
+                        [
+                            {text: 'ok', onPress: () => null},
+                        ],
+                    )
         }
         
     }
