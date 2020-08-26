@@ -34,7 +34,8 @@ export default class LoginScreen extends Component{
                 const userInfo = doc.data();
                 if(userInfo.password === this.state.pwText) {
                     console.log('password match !!!');
-                    AsyncStorage.setItem('user', {id: doc.id, password: doc.data().password});
+                    AsyncStorage.setItem('userId', doc.id);
+                    AsyncStorage.setItem('userPassword', userInfo.password);
                     this.props.navigation.replace('TabNavigator');
                 } else {
                     console.log('Invalid ID and Password. Please check again.');

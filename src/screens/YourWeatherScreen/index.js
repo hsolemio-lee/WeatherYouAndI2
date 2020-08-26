@@ -118,8 +118,8 @@ export default class YourWeather extends Component{
     
     _saveMessage() {
         if(this.state.message.length > 0) {
-            AsyncStorage.getItem('user').then(user => {
-                firestore.collection('yourWeather').doc(user.id).set({
+            AsyncStorage.getItem('userId').then(userId => {
+                firestore.collection('yourWeather').doc(userId).set({
                     message: this.state.message
                 })
                 .then(() => {

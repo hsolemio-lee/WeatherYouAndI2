@@ -70,9 +70,14 @@ export default class HomeScreen extends Component{
       };
     
       async componentDidMount() {
-        const user = await AsyncStorage.getItem('user');
-        if(user != null) {
-          this.user = user;
+        const userId = await AsyncStorage.getItem('userId');
+        const userPw = await AsyncStorage.getItem('userPassword');
+
+        if(userId != null) {
+          this.user = {
+            'id': userId,
+            'password': userPw
+          };
   
           await this.registerForPushNotificationsAsync();
   
