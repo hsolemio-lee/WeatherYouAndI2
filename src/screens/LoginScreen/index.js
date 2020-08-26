@@ -20,6 +20,13 @@ export default class LoginScreen extends Component{
             pwText: ''
         }
     }
+
+    async componentDidMount() {
+        const userId = await AsyncStorage.getItem('userId'); 
+        if(userId && userId !== null) { 
+            this.props.navigation.replace('TabNavigator'); 
+        } 
+    }
     
     static navigationOptions = {
         headerShown: false,
