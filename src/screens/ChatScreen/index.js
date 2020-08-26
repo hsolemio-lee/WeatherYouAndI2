@@ -82,12 +82,13 @@ export default class ChatScreen extends React.Component {
     }
 
     render() {
-        const chat = <GiftedChat messages={this.state.messages} 
-        onSend={(messages) => {
-            this.sendMessage(messages);
-            this.sendPush(messages);
-        }} 
-        user={this.user} />;
+         const chat = <GiftedChat 
+                        renderUsernameOnMessage={true} messages={this.state.messages} 
+                        onSend={(messages) => {
+                                this.sendMessage(messages);
+                                this.sendPush(messages);
+                        }} 
+                        user={this.user} />;
 
         if (Platform.OS === 'android') {
             return (
