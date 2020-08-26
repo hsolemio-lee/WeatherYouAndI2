@@ -39,11 +39,13 @@ export default class LoginScreen extends Component{
                     this.props.navigation.replace('TabNavigator');
                 } else {
                     console.log('Invalid ID and Password. Please check again.');
-                    // Toast.show('Invalid ID and Password. Please check again.');
-                    // Snackbar.show({
-                    //     text: 'Invalid ID and Password. Please check again.',
-                    //     duration: Snackbar.LENGTH_SHORT
-                    // });
+                    Alert.alert(
+                        "Alert",
+                        "Password not matched. Please check ID and Password.",
+                        [
+                            {text: 'ok', onPress: () => null},
+                        ],
+                    )
                 }
             });
         } else {
